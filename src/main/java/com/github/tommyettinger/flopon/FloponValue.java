@@ -26,6 +26,8 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.github.tommyettinger.flopon.NumericBase.FLOPON_SAFE;
+
 /** Container for a JSON object, array, string, double, long, boolean, or null.
  * <p>
  * FloponValue children are a linked list. Iteration of arrays or objects is easily done using an iterator or the {@link #next()}
@@ -210,7 +212,7 @@ public class FloponValue implements Iterable<FloponValue> {
 		case stringValue:
 			return stringValue;
 		case doubleValue:
-			return stringValue != null ? stringValue : Double.toString(doubleValue);
+			return stringValue != null ? stringValue : FLOPON_SAFE.unsigned(doubleValue);
 		case longValue:
 			return stringValue != null ? stringValue : Long.toString(longValue);
 		case booleanValue:
@@ -226,7 +228,7 @@ public class FloponValue implements Iterable<FloponValue> {
 	public float asFloat () {
 		switch (type) {
 		case stringValue:
-			return Float.parseFloat(stringValue);
+			return (float) FLOPON_SAFE.readDouble(stringValue);
 		case doubleValue:
 			return (float)doubleValue;
 		case longValue:
@@ -242,7 +244,7 @@ public class FloponValue implements Iterable<FloponValue> {
 	public double asDouble () {
 		switch (type) {
 		case stringValue:
-			return Double.parseDouble(stringValue);
+			return FLOPON_SAFE.readDouble(stringValue);
 		case doubleValue:
 			return doubleValue;
 		case longValue:
@@ -362,7 +364,7 @@ public class FloponValue implements Iterable<FloponValue> {
 				v = value.stringValue;
 				break;
 			case doubleValue:
-				v = stringValue != null ? stringValue : Double.toString(value.doubleValue);
+				v = stringValue != null ? stringValue : FLOPON_SAFE.unsigned(value.doubleValue);
 				break;
 			case longValue:
 				v = stringValue != null ? stringValue : Long.toString(value.longValue);
@@ -391,7 +393,7 @@ public class FloponValue implements Iterable<FloponValue> {
 			float v;
 			switch (value.type) {
 			case stringValue:
-				v = Float.parseFloat(value.stringValue);
+				v = (float) FLOPON_SAFE.readDouble(value.stringValue);
 				break;
 			case doubleValue:
 				v = (float)value.doubleValue;
@@ -420,7 +422,7 @@ public class FloponValue implements Iterable<FloponValue> {
 			double v;
 			switch (value.type) {
 			case stringValue:
-				v = Double.parseDouble(value.stringValue);
+				v = FLOPON_SAFE.readDouble(value.stringValue);
 				break;
 			case doubleValue:
 				v = value.doubleValue;
@@ -1207,7 +1209,7 @@ public class FloponValue implements Iterable<FloponValue> {
 		} else if (object.isDouble()) {
 			double doubleValue = object.asDouble();
 			long longValue = object.asLong();
-			writer.append(Double.toString(doubleValue == longValue ? longValue : doubleValue));
+			writer.append(doubleValue == longValue ? FLOPON_SAFE.unsigned(longValue) : FLOPON_SAFE.unsigned(doubleValue));
 		} else if (object.isLong()) {
 			writer.append(Long.toString(object.asLong()));
 		} else if (object.isBoolean()) {
