@@ -75,7 +75,7 @@ public class NumericBase {
 	public static final NumericBase URI_SAFE = new NumericBase("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-", false, '$', '*', '~');
 	/**
 	 * One of the base-64 schemes available here, this is not a standard base64 system but is meant to be more
-	 * compatible with libGDX Json. It uses the digits 0-9, then A-Z, then a-z, then $ and _ (case-sensitive). This uses
+	 * compatible with Flopon. It uses the digits 0-9, then A-Z, then a-z, then $ and _ (case-sensitive). This uses
 	 * + and - normally.
 	 */
 	public static final NumericBase FLOPON_SAFE = new NumericBase("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$_", false, '#', '+', '-');
