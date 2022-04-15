@@ -433,6 +433,58 @@ public class NumericBase {
 	}
 
 	/**
+	 * Reads in a CharSequence containing only the digits present in this NumericBase, with an optional sign at the
+	 * start, and returns the long they represent, or 0 if nothing could be read.  The leading sign can be the
+	 * {@link #positiveSign} or {@link #negativeSign} if present; these are almost always '+' and '-'.
+	 * This can also represent negative numbers as they are printed by such methods as String.format
+	 * given a %x in the formatting string, or this class' {@link #unsigned(long)} method; that is, if the first
+	 * char of a max-length digit sequence is in the upper half of possible digits (such as 8 for hex digits or 4
+	 * for octal), then the whole number represents a negative number, using two's complement and so on. This means
+	 * when using base-16, "FFFFFFFFFFFFFFFF" would return the long -1 when passed to this, though you could also
+	 * simply use "-1". If you use both '-' at the start and have the most significant digit as 8 or higher, such as
+	 * with "-FFFFFFFFFFFFFFFF", then both indicate a negative number, but the digits will be processed first
+	 * (producing -1) and then the whole thing will be multiplied by -1 to flip the sign again (returning 1).
+	 * <br>
+	 * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is an odd omission from earlier JDKs.
+	 * Unlike readLong(), this throws a NumberFormatException on invalid input.
+	 *
+	 * @param cs    a CharSequence, such as a String, containing only the digits in this NumericBase and/or an optional initial sign (usually + or -)
+	 * @param start the (inclusive) first character position in cs to read
+	 * @param end   the (exclusive) last character position in cs to read (this after reading enough chars to represent the largest possible value)
+	 * @return the long that cs represents
+	 * @throws NumberFormatException if the bounds are incorrect, if the CharSequence is empty, or the CharSequence has
+	 *         any chars that are not valid digits
+	 */
+	public long readLongEx (final CharSequence cs, final int start, int end) throws NumberFormatException {
+		int len, h, lim;
+		if (start < 0 || end <= 0 || end - start <= 0 || (len = cs.length()) - start <= 0 || end > len)
+			throw new NumberFormatException("Invalid number: incorrect start/end bounds");
+		char c = cs.charAt(start);
+		if (c == negativeSign) {
+			len = -1;
+			h = 0;
+			lim = length8Byte + 1;
+		} else if (c == positiveSign) {
+			len = 1;
+			h = 0;
+			lim = length8Byte + 1;
+		} else if ((h = fromEncoded[c & 127]) < 0)
+			throw new NumberFormatException("Invalid number: digit not in base");
+		else {
+			len = 1;
+			lim = length8Byte;
+		}
+		long data = h;
+		for (int i = start + 1; i < end && i < start + lim; i++) {
+			if ((h = fromEncoded[cs.charAt(i) & 127]) < 0)
+				throw new NumberFormatException("Invalid number: digit not in base");
+			data *= base;
+			data += h;
+		}
+		return data * len;
+	}
+
+	/**
 	 * Reads in a char array containing only the digits present in this NumericBase, with an optional sign at the
 	 * start, and returns the long they represent, or 0 if nothing could be read.  The leading sign can be the
 	 * {@link #positiveSign} or {@link #negativeSign} if present; these are almost always '+' and '-'.
@@ -1199,6 +1251,23 @@ public class NumericBase {
 
 	/**
 	 * Reads in a CharSequence containing only the digits present in this NumericBase, with an optional sign at the
+	 * start, and returns the double those bits represent, or 0.0 if nothing could be read. The leading sign can be
+	 * {@link #positiveSign} or {@link #negativeSign} if present, and is almost always '+' or '-'.
+	 * This is meant entirely for non-human-editable content, and the digit strings this can read
+	 * will almost always be produced by {@link #signed(double)}, {@link #unsigned(double)}, or their append versions.
+	 * <br>
+	 * Unlike readDouble(), this throws a NumberFormatException on invalid input.
+	 *
+	 * @param cs a CharSequence, such as a String, containing only the digits in this NumericBase and/or an optional initial sign (usually + or -)
+	 * @return the double that cs represents
+	 * @throws NumberFormatException if the CharSequence is empty or has any chars that are not valid digits
+	 */
+	public double readDoubleEx (final CharSequence cs) throws NumberFormatException {
+		return NumberUtils.longBitsToDouble((readLongEx(cs, 0, cs.length())));
+	}
+
+	/**
+	 * Reads in a CharSequence containing only the digits present in this NumericBase, with an optional sign at the
 	 * start, and returns the double those bits represent, or 0.0 if nothing could be read.  The leading sign can be
 	 * {@link #positiveSign} or {@link #negativeSign} if present, and is almost always '+' or '-'.
 	 * This is meant entirely for non-human-editable content, and the digit strings this can read
@@ -1215,6 +1284,26 @@ public class NumericBase {
 	 */
 	public double readDouble (final CharSequence cs, final int start, int end) {
 		return NumberUtils.longBitsToDouble((readLong(cs, start, end)));
+	}
+
+	/**
+	 * Reads in a CharSequence containing only the digits present in this NumericBase, with an optional sign at the
+	 * start, and returns the double those bits represent, or 0.0 if nothing could be read.  The leading sign can be
+	 * {@link #positiveSign} or {@link #negativeSign} if present, and is almost always '+' or '-'.
+	 * This is meant entirely for non-human-editable content, and the digit strings this can read
+	 * will almost always be produced by {@link #signed(double)}, {@link #unsigned(double)}, or their append versions.
+	 * <br>
+	 * Unlike readDouble(), this throws a NumberFormatException on invalid input.
+	 *
+	 * @param cs    a CharSequence, such as a String, containing only the digits in this NumericBase and/or an optional initial sign (usually + or -)
+	 * @param start the (inclusive) first character position in cs to read
+	 * @param end   the (exclusive) last character position in cs to read (this after reading enough chars to represent the largest possible value)
+	 * @return the double that cs represents
+	 * @throws NumberFormatException if the bounds are incorrect, if the CharSequence is empty, or the CharSequence has
+	 *         any chars that are not valid digits
+	 */
+	public double readDoubleEx (final CharSequence cs, final int start, int end) throws NumberFormatException {
+		return NumberUtils.longBitsToDouble((readLongEx(cs, start, end)));
 	}
 
 	/**
