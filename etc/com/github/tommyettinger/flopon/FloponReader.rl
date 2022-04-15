@@ -404,7 +404,7 @@ public class FloponReader {
 			if (i == length) break;
 			c = value.charAt(i++);
 			if (c == 'u') {
-				buffer.append(Character.toChars(Integer.parseInt(value.substring(i, i + 4), 16)));
+            	buffer.append(NumericBase.BASE16.readChar(value, i, i + 4));
 				i += 4;
 				continue;
 			}
