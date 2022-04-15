@@ -1193,7 +1193,7 @@ public class NumericBase {
 	 * @return a new String containing the bits of {@code number} in the radix this specifies.
 	 */
 	public String unsigned (double number) {
-		return unsigned((NumberUtils.doubleToLongBits(number)));
+		return unsigned(Long.reverseBytes(NumberUtils.doubleToLongBits(number)));
 	}
 
 	/**
@@ -1205,7 +1205,7 @@ public class NumericBase {
 	 * @return {@code builder}, with the bits of {@code number} appended in the radix this specifies
 	 */
 	public StringBuilder appendUnsigned (StringBuilder builder, double number) {
-		return appendUnsigned(builder, (NumberUtils.doubleToLongBits(number)));
+		return appendUnsigned(builder, Long.reverseBytes(NumberUtils.doubleToLongBits(number)));
 	}
 
 	/**
@@ -1216,7 +1216,7 @@ public class NumericBase {
 	 * @return a new String containing {@code number} in the radix this specifies.
 	 */
 	public String signed (double number) {
-		return signed((NumberUtils.doubleToLongBits(number)));
+		return signed(Long.reverseBytes(NumberUtils.doubleToLongBits(number)));
 	}
 
 	/**
@@ -1229,7 +1229,7 @@ public class NumericBase {
 	 * @return {@code builder}, with the encoded {@code number} appended
 	 */
 	public StringBuilder appendSigned (StringBuilder builder, double number) {
-		return appendSigned(builder, (NumberUtils.doubleToLongBits(number)));
+		return appendSigned(builder, Long.reverseBytes(NumberUtils.doubleToLongBits(number)));
 	}
 
 	/**
@@ -1247,7 +1247,7 @@ public class NumericBase {
 	 * @return the double that cs represents
 	 */
 	public double readDouble (final CharSequence cs) {
-		return NumberUtils.longBitsToDouble((readLong(cs, 0, cs.length())));
+		return NumberUtils.longBitsToDouble(Long.reverseBytes(readLong(cs, 0, cs.length())));
 	}
 
 	/**
@@ -1264,7 +1264,7 @@ public class NumericBase {
 	 * @throws NumberFormatException if the CharSequence is empty or has any chars that are not valid digits
 	 */
 	public double readDoubleEx (final CharSequence cs) throws NumberFormatException {
-		return NumberUtils.longBitsToDouble((readLongEx(cs, 0, cs.length())));
+		return NumberUtils.longBitsToDouble(Long.reverseBytes(readLongEx(cs, 0, cs.length())));
 	}
 
 	/**
@@ -1284,7 +1284,7 @@ public class NumericBase {
 	 * @return the double that cs represents
 	 */
 	public double readDouble (final CharSequence cs, final int start, int end) {
-		return NumberUtils.longBitsToDouble((readLong(cs, start, end)));
+		return NumberUtils.longBitsToDouble(Long.reverseBytes(readLong(cs, start, end)));
 	}
 
 	/**
@@ -1304,7 +1304,7 @@ public class NumericBase {
 	 *         any chars that are not valid digits
 	 */
 	public double readDoubleEx (final CharSequence cs, final int start, int end) throws NumberFormatException {
-		return NumberUtils.longBitsToDouble((readLongEx(cs, start, end)));
+		return NumberUtils.longBitsToDouble(Long.reverseBytes(readLongEx(cs, start, end)));
 	}
 
 	/**
@@ -1324,7 +1324,7 @@ public class NumericBase {
 	 * @return the double that cs represents
 	 */
 	public double readDouble (final char[] cs, final int start, int end) {
-		return NumberUtils.longBitsToDouble((readLong(cs, start, end)));
+		return NumberUtils.longBitsToDouble(Long.reverseBytes(readLong(cs, start, end)));
 	}
 
 	/**

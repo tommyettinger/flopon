@@ -212,7 +212,7 @@ public class FloponValue implements Iterable<FloponValue> {
 		case stringValue:
 			return stringValue;
 		case doubleValue:
-			return stringValue != null ? stringValue : FLOPON_SAFE.unsigned(doubleValue);
+			return stringValue != null ? stringValue : FLOPON_SAFE.signed(doubleValue);
 		case longValue:
 			return stringValue != null ? stringValue : Long.toString(longValue);
 		case booleanValue:
@@ -364,7 +364,7 @@ public class FloponValue implements Iterable<FloponValue> {
 				v = value.stringValue;
 				break;
 			case doubleValue:
-				v = stringValue != null ? stringValue : FLOPON_SAFE.unsigned(value.doubleValue);
+				v = stringValue != null ? stringValue : FLOPON_SAFE.signed(value.doubleValue);
 				break;
 			case longValue:
 				v = stringValue != null ? stringValue : Long.toString(value.longValue);
@@ -1209,7 +1209,7 @@ public class FloponValue implements Iterable<FloponValue> {
 		} else if (object.isDouble()) {
 			double doubleValue = object.asDouble();
 			long longValue = object.asLong();
-			writer.append(doubleValue == longValue ? FLOPON_SAFE.unsigned(longValue) : FLOPON_SAFE.unsigned(doubleValue));
+			writer.append(doubleValue == longValue ? Long.toString(longValue) : FLOPON_SAFE.signed(doubleValue));
 		} else if (object.isLong()) {
 			writer.append(Long.toString(object.asLong()));
 		} else if (object.isBoolean()) {

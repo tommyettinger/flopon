@@ -38,4 +38,15 @@ public class BasicTest {
         System.out.println(bill2);
         System.out.println(f.toFlopon(bill2));
     }
+    @Test
+    public void testSame(){
+        Flopon f = new Flopon(FloponWriter.OutputType.minimal);
+        BasicHolder bill = new BasicHolder("Bill");
+        bill.d = bill.l = 1234L;
+        String text = f.toFlopon(bill);
+        System.out.println(text);
+        BasicHolder bill2 = f.fromFlopon(BasicHolder.class, text);
+        System.out.println(bill2);
+        System.out.println(f.toFlopon(bill2));
+    }
 }
