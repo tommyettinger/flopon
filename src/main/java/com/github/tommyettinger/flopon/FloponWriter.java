@@ -80,8 +80,10 @@ public class FloponWriter extends Writer {
 
 	public FloponWriter value (Object value) throws IOException {
 		if (quoteLongValues
-			&& (value instanceof Long || value instanceof Double || value instanceof BigDecimal || value instanceof BigInteger)) {
+			&& (value instanceof Long || value instanceof BigDecimal || value instanceof BigInteger)) {
 			value = value.toString();
+		} else if(value instanceof Double){
+			value = NumericBase.FLOPON_SAFE.unsigned((Double)value);
 		} else if (value instanceof Number) {
 			Number number = (Number)value;
 			long longValue = number.longValue();
@@ -188,6 +190,7 @@ public class FloponWriter extends Writer {
 
 		public String quoteValue (Object value) {
 			if (value == null) return "null";
+			if(value instanceof Double || value instanceof Float) return NumericBase.FLOPON_SAFE.unsigned(((Number)value).doubleValue());
 			String string = value.toString();
 			if (value instanceof Number || value instanceof Boolean) return string;
 			StringBuilder buffer = new StringBuilder(string);

@@ -34,7 +34,7 @@ import java.util.*;
  * https://libgdx.com/wiki/utils/reading-and-writing-json
  * @author Nathan Sweet */
 public class Flopon {
-	static private final boolean debug = false;
+	static private final boolean debug = true;
 
 	private FloponWriter writer;
 	private String typeName = "class";
@@ -609,6 +609,26 @@ public class Flopon {
 				writeObjectEnd();
 				return;
 			}
+			if (value instanceof IntIntMap) {
+				if (knownType == null) knownType = IntIntMap.class;
+				writeObjectStart(actualType, knownType);
+				for (IntIntMap.Entry entry : ((IntIntMap)value).entries()) {
+					writer.name(String.valueOf(entry.key));
+					writeValue(entry.value, Integer.class);
+				}
+				writeObjectEnd();
+				return;
+			}
+			if (value instanceof IntFloatMap) {
+				if (knownType == null) knownType = IntFloatMap.class;
+				writeObjectStart(actualType, knownType);
+				for (IntFloatMap.Entry entry : ((IntFloatMap)value).entries()) {
+					writer.name(String.valueOf(entry.key));
+					writeValue(entry.value, Float.class);
+				}
+				writeObjectEnd();
+				return;
+			}
 			if (value instanceof LongMap) {
 				if (knownType == null) knownType = LongMap.class;
 				writeObjectStart(actualType, knownType);
@@ -1037,6 +1057,18 @@ public class Flopon {
 					IntMap result = (IntMap)object;
 					for (FloponValue child = jsonData.child; child != null; child = child.next)
 						result.put(Integer.parseInt(child.name), readValue(elementType, null, child));
+					return (T)result;
+				}
+				if (object instanceof IntIntMap) {
+					IntIntMap result = (IntIntMap)object;
+					for (FloponValue child = jsonData.child; child != null; child = child.next)
+						result.put(Integer.parseInt(child.name), readValue(Integer.class, null, child));
+					return (T)result;
+				}
+				if (object instanceof IntFloatMap) {
+					IntFloatMap result = (IntFloatMap)object;
+					for (FloponValue child = jsonData.child; child != null; child = child.next)
+						result.put(Integer.parseInt(child.name), readValue(Float.class, null, child));
 					return (T)result;
 				}
 				if (object instanceof LongMap) {
