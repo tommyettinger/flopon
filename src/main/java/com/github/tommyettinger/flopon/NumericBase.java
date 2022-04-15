@@ -42,6 +42,7 @@ import java.util.Random;
  * of number, but it is capable of reading both the signed and unsigned results, and never throws an Exception (it just
  * returns 0 if no number could be read).
  */
+@SuppressWarnings("ShiftOutOfRange")
 public class NumericBase {
 	/**
 	 * Binary, using the digits 0 and 1.
@@ -101,7 +102,7 @@ public class NumericBase {
 	 *
 	 * @return an immutable List of all NumericBase instances this knows about from the start
 	 */
-	public static List<NumericBase> values () {
+	public static List<NumericBase> values() {
 		return BASES;
 	}
 
