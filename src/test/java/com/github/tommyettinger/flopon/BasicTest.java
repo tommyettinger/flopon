@@ -31,22 +31,20 @@ public class BasicTest {
     @Test
     public void testWriteRead(){
         Flopon f = new Flopon(FloponWriter.OutputType.minimal);
-        BasicHolder bill = new BasicHolder("Bill");
-        String text = f.toFlopon(bill);
+        BasicHolder dave = new BasicHolder("Dave");
+        String text = f.toFlopon(dave);
         System.out.println(text);
         BasicHolder bill2 = f.fromFlopon(BasicHolder.class, text);
-        System.out.println(bill2);
         System.out.println(f.toFlopon(bill2));
     }
     @Test
     public void testSame(){
         Flopon f = new Flopon(FloponWriter.OutputType.minimal);
-        BasicHolder bill = new BasicHolder("Bill");
-        bill.d = bill.l = 1234L;
-        String text = f.toFlopon(bill);
+        BasicHolder rick = new BasicHolder("Rick");
+        rick.d = rick.l = 1234L;
+        String text = f.toFlopon(rick);
         System.out.println(text);
         BasicHolder bill2 = f.fromFlopon(BasicHolder.class, text);
-        System.out.println(bill2);
         System.out.println(f.toFlopon(bill2));
     }
 }

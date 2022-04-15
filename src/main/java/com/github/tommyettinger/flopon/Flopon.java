@@ -34,7 +34,7 @@ import java.util.*;
  * https://libgdx.com/wiki/utils/reading-and-writing-json
  * @author Nathan Sweet */
 public class Flopon {
-	static private final boolean debug = true;
+	static private final boolean debug = false;
 
 	private FloponWriter writer;
 	private String typeName = "class";

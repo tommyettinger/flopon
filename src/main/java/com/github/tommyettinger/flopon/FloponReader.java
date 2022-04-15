@@ -102,7 +102,7 @@ public class FloponReader {
         boolean needsUnescape = false, stringIsName = false, stringIsUnquoted = false;
         RuntimeException parseRuntimeEx = null;
 
-        boolean debug = true;
+        boolean debug = false;
         if (debug) System.out.println();
 
         try {
