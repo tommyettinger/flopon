@@ -1,6 +1,5 @@
-# Library Template using libGDX and Gradle 7.x
+# flopon
 
-Change this to fit your library!
+Floating-Point Optimized Notation
 
-You'll want to edit gradle.properties to match your library's name, description, author, license, and so on.
-You probably also want to edit build.gradle to match the projectName and group to what you want to use.
+It's like JSON, but the floats aren't necessarily human-readable, and it should be faster when reading or writing many floats or doubles.
